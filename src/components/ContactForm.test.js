@@ -3,8 +3,6 @@ import {render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ContactForm from './ContactForm';
 
-const errors = () => screen.queryAllByTestId('error')
-
 test('renders without errors', () => {
     render(<ContactForm />)
 });
@@ -20,6 +18,7 @@ test('renders the contact form header', ()=> {
 test('renders ONE error message if user enters less then 5 characters into firstname.', async () => {
     render(<ContactForm />)
     const firstnameInput = () => screen.getByLabelText('First Name*')
+    const errors = () => screen.queryAllByTestId('error')
     userEvent.type(firstnameInput(), 'qqq')
     await waitFor(() => {
         expect(errors()).toHaveLength(1)
@@ -29,6 +28,7 @@ test('renders ONE error message if user enters less then 5 characters into first
 test('renders THREE error messages if user enters no values into any fields.', async () => {
     render(<ContactForm />)
     const submit = () => screen.getByRole('button')
+    const errors = () => screen.queryAllByTestId('error')
     userEvent.click(submit())
     await waitFor(() => {
         expect(errors()).toHaveLength(3)
@@ -40,6 +40,7 @@ test('renders ONE error message if user enters a valid first name and last name 
     const firstnameInput = () => screen.getByLabelText('First Name*')
     const lastnameInput = () => screen.getByLabelText('Last Name*')
     const submit = () => screen.getByRole('button')
+    const errors = () => screen.queryAllByTestId('error')
     userEvent.type(firstnameInput(), 'Elmer')
     userEvent.type(lastnameInput(), 'Fudd')
     userEvent.click(submit())
@@ -51,6 +52,7 @@ test('renders ONE error message if user enters a valid first name and last name 
 test('renders "email must be a valid email address" if an invalid email is entered', async () => {
     render(<ContactForm />)
     const emailInput = () => screen.getByLabelText('Email*')
+    const errors = () => screen.queryAllByTestId('error')
     userEvent.type(emailInput(), 'email')
     await waitFor(() => {
         expect(errors()[0])
@@ -63,6 +65,7 @@ test('renders "lastName is a required field" if an last name is not entered and 
     const firstnameInput = () => screen.getByLabelText('First Name*')
     const emailInput = () => screen.getByLabelText('Email*')
     const submit = () => screen.getByRole('button')
+    const errors = () => screen.queryAllByTestId('error')
     userEvent.type(firstnameInput(), 'Elmer')
     userEvent.type(emailInput(), 'killd@wabb.it')
     userEvent.click(submit())
@@ -76,7 +79,6 @@ test('renders all firstName, lastName and email text when submitted. Does NOT re
     const firstnameInput = () => screen.getByLabelText('First Name*')
     const lastnameInput = () => screen.getByLabelText('Last Name*')
     const emailInput = () => screen.getByLabelText('Email*')
-    const messageInput = () => screen.getByLabelText('Message')
     const submit = () => screen.getByRole('button')
     const firstnameDisplay = () => screen.queryByTestId('firstnameDisplay')
     const lastnameDisplay = () => screen.queryByTestId('lastnameDisplay')
