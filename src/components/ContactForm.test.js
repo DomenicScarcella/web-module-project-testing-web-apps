@@ -1,7 +1,6 @@
 import React from 'react';
 import {render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import ContactForm from './ContactForm';
 
 const errors = () => screen.queryAllByTestId('error')
@@ -68,8 +67,7 @@ test('renders "lastName is a required field" if an last name is not entered and 
     userEvent.type(emailInput(), 'killd@wabb.it')
     userEvent.click(submit())
     await waitFor(() => {
-        const error = errors()[0]
-        expect(error).toHaveTextContent('lastName is a required field.')
+        expect(errors()[0]).toHaveTextContent('lastName is a required field.')
     })
 });
 
